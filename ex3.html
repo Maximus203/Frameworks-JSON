@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Hello React+JSX</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="react/react.js"></script>
+  <script src="react/react-dom.js"></script>
+  <script src="react/babel.js"></script>
+  <script type="text/babel">
+    const data = [
+      {
+        id: 1,
+        title: "Titanic",
+        releaseYear: 1997,
+      },
+      {
+        id: 2,
+        title: "Esprits Criminels",
+        releaseYear: 2004,
+      },
+      {
+        id: 3,
+        title: "Staavr Wars",
+        releaseYear: 1977,
+      },
+    ];
+
+    class Movies extends React.Component {
+      render() {
+        return (
+          <table className="table table-sm table-striped">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Release Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.props.movie_list.map(movie => (
+                <tr key={movie.id}>
+                  <Movie title="My movie list" movie={movie} />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      }
+    }
+
+    class Movie extends React.Component {
+      render() {
+        return (
+          <React.Fragment>
+            <td>{this.props.movie.id}</td>
+            <td>{this.props.movie.title}</td>
+            <td>{this.props.movie.releaseYear}</td>
+          </React.Fragment>
+        );
+      }
+    }
+
+
+    class App extends React.Component {
+      render() {
+        return <Movies movie_list={data} />;
+      }
+    }
+
+    ReactDOM.render(<App />, document.querySelector("#app"));
+  </script>
+</body>
+
+</html>

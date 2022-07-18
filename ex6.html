@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Hello React+JSX</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="react/react.js"></script>
+  <script src="react/react-dom.js"></script>
+  <script src="react/babel.js"></script>
+  <script type="text/babel">
+    /* 
+    voir fichier word
+      Les données sont à récupérer au niveau de l'API
+      universities.hipolabs.com/search?country=Senegal
+    */
+    class App extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          data: [],
+        };
+      }
+      componentDidMount() {
+        fetch("http://universities.hipolabs.com/search?country=Senegal")
+          .then(result => result.json())
+          .then(result => {
+            this.setState({ data: result });
+          })
+          .catch(err => console.error(err));
+      }
+      render() {
+        return (
+          <div>
+            <List title="University" university_list={this.state.data} />;
+          </div>
+        );
+      }
+    }
+
+    class List extends React.Component {
+      render() {
+        return (
+          <table className="table table-sm table-striped">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Web_pages</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {this.props.university_list.map(item => (
+                <tr key={item.title}>
+                  <Item item={item} />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      }
+    }
+
+    class Item extends React.Component {
+      render() {
+        return (
+          <React.Fragment>
+            <td>{this.props.item.count}</td>
+            <td>{this.props.item.name}</td>
+            <td>{this.props.item.web_pages}</td>
+          </React.Fragment>
+        );
+      }
+    }
+
+
+    ReactDOM.render(<App />, document.querySelector("#app"));
+  </script>
+</body>
+
+</html>

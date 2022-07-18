@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello React+JSX</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/normal.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="react/react.js"></script>
+    <script src="react/react-dom.js"></script>
+    <script src="react/babel.js"></script>
+    <script type="text/babel">
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            data: [],
+          };
+        }
+        componentDidMount() {
+          fetch("https://hn.algolia.com/api/v1/search?query=")
+            .then(result => result.json())
+            .then(result => {
+              this.setState({ data: result.hits });
+            })
+            .catch(err => console.error(err));
+        }
+        render() {
+          return (
+            <div>
+              <h1>My Hacker Stories</h1>
+              <List list={this.state.data} />
+            </div>
+          );
+        }
+      }
+
+      class List extends React.Component {
+        render() {
+          return (
+            <table className="table table-sm table-striped">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Url</th>
+                  <th>Author</th>
+                  <th>Num_comments</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.props.list.map(item => (
+                  <tr key={item.title}>
+                    <Item item={item} />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          );
+        }
+      }
+
+      class Item extends React.Component {
+        render() {
+          return (
+            <React.Fragment>
+              <td>{this.props.item.title}</td>
+              <td>
+                <a href={this.props.item.url}>{this.props.item.url}</a>
+              </td>
+              <td>{this.props.item.author}</td>
+              <td>{this.props.item.num_comments}</td>
+              <td>{this.props.item.points}</td>
+            </React.Fragment>
+          );
+        }
+      }
+
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>
